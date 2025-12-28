@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Movie Picker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #14181c;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-screen h1 {
+            font-size: 32px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            background: #2c3440;
+            border: 2px solid #456;
+            border-radius: 8px;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        
+        .login-form input:focus {
+            outline: none;
+            border-color: #00c030;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #00c030;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .login-form button:active {
+            transform: scale(0.98);
+        }
+        
+        /* Main App */
+        .app {
+            display: none;
+        }
+        
+        .app.active {
+            display: block;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            color: #9ab;
+        }
+        
+        .logout-btn {
+            padding: 8px 16px;
+            background: #2c3440;
+            border: none;
+            border-radius: 6px;
+            color: #9ab;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .movie-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .movie-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .movie-card:active {
+            transform: scale(0.95);
+        }
+        
+        .poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            background: #2c3440;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .vote-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .vote-badge.yes {
+            background: #00c030;
+        }
+        
+        .vote-badge.maybe {
+            background: #ff8000;
+        }
+        
+        .vote-badge.veto {
+            background: #ff0000;
+        }
+        
+        .movie-title {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: block;
+        }
+        
+        .modal-content {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .modal-poster {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .modal-poster img {
+            width: 100%;
+            display: block;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .modal-year {
+            font-size: 14px;
+            color: #9ab;
+            margin-bottom: 16px;
+        }
+        
+        .modal-summary {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #9ab;
+            margin-bottom: 32px;
+        }
+        
+        .vote-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .vote-btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .vote-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .vote-btn.yes {
+            background: #00c030;
+            color: white;
+        }
+        
+        .vote-btn.maybe {
+            background: #ff8000;
+            color: white;
+        }
+        
+        .vote-btn.veto {
+            background: #ff0000;
+            color: white;
+        }
+        
+        .close-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2c3440;
+            border: none;
+            border-radius: 8px;
+            color: #9ab;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <h1>🎬 Movie Night</h1>
+        <form class="login-form" onsubmit="login(event)">
+            <input 
+                type="text" 
+                id="nameInput" 
+                placeholder="Enter your name"
+                required
+                autocomplete="off"
+            >
+            <button type="submit">Continue</button>
+        </form>
+    </div>
+    
+    <!-- Main App -->
+    <div class="app" id="app">
+        <div class="container">
+            <div class="header">
+                <h1>Movie Night</h1>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="user-name" id="userName"></span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <div class="movie-grid" id="movieGrid"></div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-poster" id="modalPoster"></div>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="modal-year" id="modalYear"></div>
+            <p class="modal-summary" id="modalSummary"></p>
+            
+            <div class="vote-buttons">
+                <button class="vote-btn yes" onclick="vote('yes')">Yes</button>
+                <button class="vote-btn maybe" onclick="vote('maybe')">Maybe</button>
+                <button class="vote-btn veto" onclick="vote('veto')">Veto</button>
+            </div>
+            
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        const movies = [
+            {
+                id: 1,
+                title: "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles",
+                year: 1975,
+                poster: "https://image.tmdb.org/t/p/w500/nXraJmO1Y6IMNxdlJlPQmRkHIIh.jpg",
+                summary: "A lonely widowed housewife does her daily chores, takes care of her apartment where she lives with her teenage son, and turns the occasional trick to make ends meet. Slowly, her ritualized daily routines begin to fall apart."
+            },
+            {
+                id: 2,
+                title: "The Exterminating Angel",
+                year: 1962,
+                poster: "https://image.tmdb.org/t/p/w500/uyKFsMQ4JzedybtiLvRjoXO9f8E.jpg",
+                summary: "After a lavish dinner party, the guests find themselves mysteriously unable to leave the room. As days pass, their behavior becomes increasingly bestial and the veneer of civilization disappears."
+            },
+            {
+                id: 3,
+                title: "Eyes Wide Shut",
+                year: 1999,
+                poster: "https://image.tmdb.org/t/p/w500/knEIz1eNGo5m4X6W4NwNrIHJWHB.jpg",
+                summary: "After his wife admits to sexual fantasies about a man she met, a New York doctor is plunged into a harrowing nocturnal odyssey through the city's sexual underworld."
+            },
+            {
+                id: 4,
+                title: "The Social Network",
+                year: 2010,
+                poster: "https://image.tmdb.org/t/p/w500/n0ybibhJtQ5icDqTp8eRytcIHJx.jpg",
+                summary: "The story of the founding of Facebook and the lawsuits that followed, exploring themes of friendship, betrayal, and the birth of the social media age."
+            },
+            {
+                id: 5,
+                title: "The Thin Red Line",
+                year: 1998,
+                poster: "https://image.tmdb.org/t/p/w500/uq2uIA8TFnwoUHNOo92KQWVREFe.jpg",
+                summary: "A philosophical meditation on war, nature, and humanity set during the Battle of Guadalcanal in World War II, following a group of soldiers as they struggle with combat and their own mortality."
+            },
+            {
+                id: 6,
+                title: "Aguirre, the Wrath of God",
+                year: 1972,
+                poster: "https://image.tmdb.org/t/p/w500/n91eP3peJLfGN3rKCaMBXfqDVCF.jpg",
+                summary: "In the 16th century, Spanish soldier Lope de Aguirre leads a doomed expedition down the Amazon in search of the legendary city of gold, El Dorado. As the journey descends into madness, Aguirre's megalomania grows."
+            }
+        ];
+        
+        let currentMovie = null;
+        let currentUser = null;
+        
+        // Check if user is already logged in
+        function init() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = savedUser;
+                showApp();
+            }
+        }
+        
+        function login(event) {
+            event.preventDefault();
+            const name = document.getElementById('nameInput').value.trim();
+            if (name) {
+                currentUser = name;
+                localStorage.setItem('currentUser', name);
+                showApp();
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('app').classList.remove('active');
+            document.getElementById('nameInput').value = '';
+        }
+        
+        function showApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('app').classList.add('active');
+            document.getElementById('userName').textContent = currentUser;
+            renderMovies();
+        }
+        
+        function getVotes() {
+            const votesKey = `votes_${currentUser}`;
+            return JSON.parse(localStorage.getItem(votesKey) || '{}');
+        }
+        
+        function saveVote(movieId, choice) {
+            const votesKey = `votes_${currentUser}`;
+            const votes = getVotes();
+            votes[movieId] = choice;
+            localStorage.setItem(votesKey, JSON.stringify(votes));
+        }
+        
+        function renderMovies() {
+            const grid = document.getElementById('movieGrid');
+            const votes = getVotes();
+            
+            grid.innerHTML = movies.map(movie => {
+                const vote = votes[movie.id];
+                const badge = vote ? `<div class="vote-badge ${vote}">${vote}</div>` : '';
+                
+                return `
+                    <div class="movie-card" onclick="openModal(${movie.id})">
+                        <div class="poster">
+                            <img src="${movie.poster}" alt="${movie.title}">
+                            ${badge}
+                        </div>
+                        <div class="movie-title">${movie.title}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function openModal(movieId) {
+            currentMovie = movies.find(m => m.id === movieId);
+            document.getElementById('modalPoster').innerHTML = `<img src="${currentMovie.poster}" alt="${currentMovie.title}">`;
+            document.getElementById('modalTitle').textContent = currentMovie.title;
+            document.getElementById('modalYear').textContent = currentMovie.year;
+            document.getElementById('modalSummary').textContent = currentMovie.summary;
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            currentMovie = null;
+        }
+        
+        function vote(choice) {
+            saveVote(currentMovie.id, choice);
+            renderMovies();
+            closeModal();
+        }
+        
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
