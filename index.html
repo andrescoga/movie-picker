@@ -4,28 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Movie Picker</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="light">
+    <title>184 Productions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #14181c;
-            color: #fff;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f0;
+            color: #1a1a1a;
             overflow-x: hidden;
+            font-weight: 300;
         }
         
         .container {
-            max-width: 600px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
-        
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+        }
+
         /* Login Screen */
         .login-screen {
             display: flex;
@@ -35,140 +45,215 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .login-screen h1 {
-            font-size: 32px;
-            margin-bottom: 40px;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Adobe Garamond', serif;
+            margin-bottom: 60px;
             text-align: center;
+            color: #1a1a1a;
         }
-        
+
+        @media (min-width: 769px) {
+            .login-screen h1 {
+                font-size: 22px;
+            }
+        }
+
         .login-form {
             width: 100%;
-            max-width: 400px;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        
-        .login-form input {
+
+        .user-option {
             width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            background: #2c3440;
-            border: 2px solid #456;
-            border-radius: 8px;
-            color: #fff;
-            margin-bottom: 16px;
-        }
-        
-        .login-form input:focus {
-            outline: none;
-            border-color: #00c030;
-        }
-        
-        .login-form button {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            background: #00c030;
-            border: none;
-            border-radius: 8px;
-            color: white;
+            padding: 16px 0;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            background: transparent;
+            border: 1px solid #d0d0c8;
+            color: #1a1a1a;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: all 0.3s;
+            font-family: 'Roboto', sans-serif;
         }
-        
-        .login-form button:active {
-            transform: scale(0.98);
+
+        .user-option:hover {
+            background: #1a1a1a;
+            color: #f5f5f0;
+            border-color: #1a1a1a;
+        }
+
+        .user-option:active {
+            opacity: 0.6;
         }
         
         /* Main App */
         .app {
             display: none;
+            min-height: 100vh;
         }
-        
+
         .app.active {
             display: block;
         }
-        
+
         .header {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #d0d0c8;
         }
-        
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Adobe Garamond', serif;
+            color: #1a1a1a;
+            text-align: center;
+            grid-column: 2;
+        }
+
+        .header-left {
+            grid-column: 1;
+            justify-self: start;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            grid-column: 3;
+            justify-self: end;
+        }
+
+        @media (min-width: 769px) {
+            .header {
+                margin-bottom: 80px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+
         .user-name {
-            font-size: 14px;
-            color: #9ab;
+            font-size: 11px;
+            font-weight: 300;
+            color: #666;
+            letter-spacing: 1px;
         }
-        
-        .logout-btn {
-            padding: 8px 16px;
-            background: #2c3440;
-            border: none;
-            border-radius: 6px;
-            color: #9ab;
-            font-size: 12px;
+
+        .nav-btn {
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid #1a1a1a;
+            color: #1a1a1a;
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-btn:hover {
+            background: #1a1a1a;
+            color: #f5f5f0;
+        }
+
+        .nav-btn.active {
+            background: #1a1a1a;
+            color: #f5f5f0;
         }
         
         .movie-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: 20px;
+            margin-bottom: 40px;
         }
-        
+
+        @media (min-width: 769px) {
+            .movie-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 30px;
+            }
+        }
+
         .movie-card {
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: opacity 0.3s;
         }
-        
+
+        .movie-card:hover {
+            opacity: 0.7;
+        }
+
         .movie-card:active {
-            transform: scale(0.95);
+            opacity: 0.5;
         }
-        
+
         .poster {
             width: 100%;
             aspect-ratio: 2/3;
-            background: #2c3440;
-            border-radius: 8px;
+            background: #e8e8e0;
             overflow: hidden;
             position: relative;
+            border: 1px solid #d0d0c8;
         }
-        
+
         .poster img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .vote-badge {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
+            top: 0;
+            right: 0;
+            padding: 8px 12px;
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
+            background: #1a1a1a;
+            color: #f5f5f0;
         }
-        
+
         .vote-badge.yes {
-            background: #00c030;
+            background: #1a1a1a;
         }
-        
+
         .vote-badge.maybe {
-            background: #ff8000;
+            background: #666;
         }
-        
+
         .vote-badge.veto {
-            background: #ff0000;
+            background: #999;
         }
-        
+
         .movie-title {
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            margin-top: 12px;
+            font-size: 12px;
+            font-weight: 300;
+            letter-spacing: 0.0px;
+            line-height: 1.4;
+        }
+
+        @media (min-width: 769px) {
+            .movie-title {
+                font-size: 13px;
+            }
         }
         
         /* Modal */
@@ -179,129 +264,412 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(245, 245, 240, 0.98);
             z-index: 1000;
             overflow-y: auto;
         }
-        
+
         .modal.active {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
         .modal-content {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+            padding: 40px 20px;
         }
-        
+
+        @media (min-width: 769px) {
+            .modal-content {
+                max-width: 600px;
+                padding: 60px 40px;
+            }
+        }
+
         .modal-poster {
             width: 100%;
-            max-width: 300px;
-            margin: 0 auto 20px;
-            border-radius: 8px;
+            max-width: 280px;
+            margin: 0 auto 32px;
             overflow: hidden;
+            border: 1px solid #d0d0c8;
         }
-        
+
+        @media (min-width: 769px) {
+            .modal-poster {
+                max-width: 320px;
+                margin-bottom: 40px;
+            }
+        }
+
         .modal-poster img {
             width: 100%;
             display: block;
         }
-        
+
         .modal-title {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 400;
             margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-align: center;
         }
-        
-        .modal-year {
-            font-size: 14px;
-            color: #9ab;
-            margin-bottom: 16px;
+
+        @media (min-width: 769px) {
+            .modal-title {
+                font-size: 22px;
+            }
         }
-        
-        .modal-summary {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #9ab;
+
+        .modal-info {
+            font-size: 12px;
+            font-weight: 300;
+            color: #666;
             margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: 1px;
         }
-        
+
+        .modal-description {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 769px) {
+            .modal-description {
+                flex-direction: row;
+                gap: 40px;
+            }
+        }
+
+        .modal-column {
+            flex: 1;
+        }
+
+        .modal-column h3 {
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .modal-column p {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.8;
+            color: #333;
+            text-align: left;
+        }
+
+        @media (min-width: 769px) {
+            .modal-column p {
+                font-size: 14px;
+            }
+        }
+
         .vote-buttons {
             display: flex;
+            flex-direction: column;
             gap: 12px;
             margin-bottom: 20px;
         }
-        
+
+        @media (min-width: 769px) {
+            .vote-buttons {
+                flex-direction: row;
+                gap: 16px;
+            }
+        }
+
         .vote-btn {
             flex: 1;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 14px 24px;
+            border: 1px solid #1a1a1a;
+            background: transparent;
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: all 0.3s;
+            font-family: 'Roboto', sans-serif;
+            color: #1a1a1a;
         }
-        
+
+        .vote-btn:hover {
+            background: #1a1a1a;
+            color: #f5f5f0;
+        }
+
         .vote-btn:active {
-            transform: scale(0.95);
+            opacity: 0.6;
         }
-        
-        .vote-btn.yes {
-            background: #00c030;
-            color: white;
+
+        .vote-btn.selected {
+            background: #1a1a1a;
+            color: #f5f5f0;
         }
-        
-        .vote-btn.maybe {
-            background: #ff8000;
-            color: white;
+
+        .vote-btn.yes:hover,
+        .vote-btn.yes.selected {
+            background: #1a1a1a;
         }
-        
-        .vote-btn.veto {
-            background: #ff0000;
-            color: white;
+
+        .vote-btn.maybe:hover,
+        .vote-btn.maybe.selected {
+            background: #666;
+            border-color: #666;
         }
-        
+
+        .vote-btn.veto:hover,
+        .vote-btn.veto.selected {
+            background: #999;
+            border-color: #999;
+        }
+
         .close-btn {
             width: 100%;
-            padding: 12px;
-            background: #2c3440;
+            padding: 14px;
+            background: transparent;
             border: none;
-            border-radius: 8px;
-            color: #9ab;
-            font-size: 14px;
+            color: #999;
+            font-size: 10px;
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             cursor: pointer;
+            transition: color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .close-btn:hover {
+            color: #1a1a1a;
+        }
+
+        /* Results View */
+        .results-view {
+            display: none;
+        }
+
+        .results-view.active {
+            display: block;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 769px) {
+            .results-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 30px;
+            }
+        }
+
+        .results-movie {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .results-poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            background: #e8e8e0;
+            overflow: hidden;
+            border: 1px solid #d0d0c8;
+            position: relative;
+        }
+
+        .results-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        .results-votes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            background: rgba(245, 245, 240, 0.95);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .results-movie:hover .results-votes {
+            opacity: 1;
+        }
+
+        .vote-count {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .vote-count-label {
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #999;
+        }
+
+        .vote-count-number {
+            font-size: 24px;
+            font-weight: 300;
+            color: #1a1a1a;
+        }
+
+        /* Suggestion Card */
+        .suggestion-card {
+            aspect-ratio: 2/3;
+            background: #e8e8e0;
+            border: 1px solid #d0d0c8;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .suggestion-card input {
+            width: 100%;
+            padding: 12px 0;
+            font-size: 13px;
+            font-weight: 300;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #1a1a1a;
+            color: #1a1a1a;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .suggestion-card input::placeholder {
+            color: #999;
+            font-weight: 300;
+        }
+
+        .suggestion-card input:focus {
+            outline: none;
+            border-bottom-color: #1a1a1a;
+        }
+
+        .suggestion-card button {
+            padding: 12px 0;
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: #1a1a1a;
+            border: none;
+            color: #f5f5f0;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .suggestion-card button:hover {
+            opacity: 0.8;
+        }
+
+        /* Suggestions in Results */
+        .suggestions-section {
+            margin-top: 60px;
+            padding-top: 60px;
+            border-top: 1px solid #d0d0c8;
+        }
+
+        .suggestions-section h2 {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .suggestion-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #d0d0c8;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-title {
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .suggestion-reason {
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .suggestion-author {
+            font-size: 11px;
+            font-weight: 300;
+            color: #999;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
-        <h1>🎬 Movie Night</h1>
-        <form class="login-form" onsubmit="login(event)">
-            <input 
-                type="text" 
-                id="nameInput" 
-                placeholder="Enter your name"
-                required
-                autocomplete="off"
-            >
-            <button type="submit">Continue</button>
-        </form>
+        <div class="login-form">
+            <button class="user-option" onclick="login('Sandy')">Sandy</button>
+            <button class="user-option" onclick="login('Aaron')">Aaron</button>
+            <button class="user-option" onclick="login('Cynthia')">Cynthia</button>
+            <button class="user-option" onclick="login('Andres')">Andres</button>
+        </div>
     </div>
-    
+
     <!-- Main App -->
     <div class="app" id="app">
         <div class="container">
             <div class="header">
-                <h1>Movie Night</h1>
-                <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="header-left">
                     <span class="user-name" id="userName"></span>
-                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+                <h1>184 Productions</h1>
+                <div class="header-nav">
+                    <button class="nav-btn active" id="moviesBtn" onclick="showMovies()">Movies</button>
+                    <button class="nav-btn" id="resultsBtn" onclick="showResults()">Results</button>
+                    <button class="nav-btn" onclick="logout()">Logout</button>
                 </div>
             </div>
-            
+
             <div class="movie-grid" id="movieGrid"></div>
+
+            <div class="results-view" id="resultsView">
+                <div class="results-grid" id="resultsGrid"></div>
+            </div>
         </div>
     </div>
     
@@ -310,15 +678,25 @@
         <div class="modal-content">
             <div class="modal-poster" id="modalPoster"></div>
             <h2 class="modal-title" id="modalTitle"></h2>
-            <div class="modal-year" id="modalYear"></div>
-            <p class="modal-summary" id="modalSummary"></p>
-            
+            <div class="modal-info" id="modalInfo"></div>
+
+            <div class="modal-description">
+                <div class="modal-column">
+                    <h3>Summary</h3>
+                    <p id="modalSummary"></p>
+                </div>
+                <div class="modal-column">
+                    <h3>Commentary</h3>
+                    <p id="modalCommentary"></p>
+                </div>
+            </div>
+
             <div class="vote-buttons">
                 <button class="vote-btn yes" onclick="vote('yes')">Yes</button>
                 <button class="vote-btn maybe" onclick="vote('maybe')">Maybe</button>
                 <button class="vote-btn veto" onclick="vote('veto')">Veto</button>
             </div>
-            
+
             <button class="close-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
@@ -328,44 +706,65 @@
             {
                 id: 1,
                 title: "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles",
+                director: "Chantal Akerman",
                 year: 1975,
-                poster: "https://image.tmdb.org/t/p/w500/nXraJmO1Y6IMNxdlJlPQmRkHIIh.jpg",
-                summary: "A lonely widowed housewife does her daily chores, takes care of her apartment where she lives with her teenage son, and turns the occasional trick to make ends meet. Slowly, her ritualized daily routines begin to fall apart."
+                poster: "https://image.tmdb.org/t/p/w500/yeL8c24oBUQSdms8f7GmRvx3DIZ.jpg",
+                summary: "A lonely widowed housewife does her daily chores, takes care of her apartment where she lives with her teenage son, and turns the occasional trick to make ends meet. Slowly, her ritualized daily routines begin to fall apart.",
+                commentary: "This film recently created quite a buzz 'cause it was allegedly named the greatest film of all time, to the chagrin of many male directors. I don't really know what this is all about, but its Wiki has words like 'feminist' and 'slow cinema'. Be careful with what you wish for."
             },
             {
                 id: 2,
                 title: "The Exterminating Angel",
+                director: "Luis Buñuel",
                 year: 1962,
-                poster: "https://image.tmdb.org/t/p/w500/uyKFsMQ4JzedybtiLvRjoXO9f8E.jpg",
-                summary: "After a lavish dinner party, the guests find themselves mysteriously unable to leave the room. As days pass, their behavior becomes increasingly bestial and the veneer of civilization disappears."
+                poster: "https://image.tmdb.org/t/p/w500/qqZXHvBFxUpo8Pfbyvgh4SYMiWm.jpg",
+                summary: "After a lavish dinner party, the guests find themselves mysteriously unable to leave the room. As days pass, their behavior becomes increasingly bestial and the veneer of civilization disappears.",
+                commentary: "Not gonna lie, my dream is for one day someone to say that something I made is 'Buñuelian'. I did watch this a while ago, and Cynthia keeps on quoting it even though she hasn't seen it. So maybe I can stop looking at her disapprovingly every time she does?"
             },
             {
                 id: 3,
                 title: "Eyes Wide Shut",
+                director: "Stanley Kubrick",
                 year: 1999,
-                poster: "https://image.tmdb.org/t/p/w500/knEIz1eNGo5m4X6W4NwNrIHJWHB.jpg",
-                summary: "After his wife admits to sexual fantasies about a man she met, a New York doctor is plunged into a harrowing nocturnal odyssey through the city's sexual underworld."
+                poster: "https://image.tmdb.org/t/p/w500/knEIz1eNGl5MQDbrEAVWA7iRqF9.jpg",
+                summary: "After his wife admits to sexual fantasies about a man she met, a New York doctor is plunged into a harrowing nocturnal odyssey through the city's sexual underworld.",
+                commentary: "We'll probably have to leave the kids back home for this one. It flirts with the 3h mark, but it is the last film of cinema's daddy."
             },
             {
                 id: 4,
                 title: "The Social Network",
+                director: "David Fincher",
                 year: 2010,
                 poster: "https://image.tmdb.org/t/p/w500/n0ybibhJtQ5icDqTp8eRytcIHJx.jpg",
-                summary: "The story of the founding of Facebook and the lawsuits that followed, exploring themes of friendship, betrayal, and the birth of the social media age."
+                summary: "The story of the founding of Facebook and the lawsuits that followed, exploring themes of friendship, betrayal, and the birth of the social media age.",
+                commentary: "Hollywood at its recent-best? I've heard so. Why don't we just get acquainted with our digital overlord and see what tickles his pickle?"
             },
             {
                 id: 5,
                 title: "The Thin Red Line",
+                director: "Terrence Malick",
                 year: 1998,
-                poster: "https://image.tmdb.org/t/p/w500/uq2uIA8TFnwoUHNOo92KQWVREFe.jpg",
-                summary: "A philosophical meditation on war, nature, and humanity set during the Battle of Guadalcanal in World War II, following a group of soldiers as they struggle with combat and their own mortality."
+                poster: "https://image.tmdb.org/t/p/w500/seMydAaoxQP6F0xbE1jOcTmn5Jr.jpg",
+                summary: "A philosophical meditation on war, nature, and humanity set during the Battle of Guadalcanal in World War II, following a group of soldiers as they struggle with combat and their own mortality.",
+                commentary: "I have heard it might be the Magnus Opus of one of my favorites. Sounds like a methodical dissection of the psyque of war, from the vantage point of American heros at the crux of what would be recognized as the pivotal moment that would give way to one of the most dominant empires history has ever seen. Cynthia: Young Adrien Brody is in it."
             },
             {
                 id: 6,
                 title: "Aguirre, the Wrath of God",
+                director: "Werner Herzog",
                 year: 1972,
-                poster: "https://image.tmdb.org/t/p/w500/n91eP3peJLfGN3rKCaMBXfqDVCF.jpg",
-                summary: "In the 16th century, Spanish soldier Lope de Aguirre leads a doomed expedition down the Amazon in search of the legendary city of gold, El Dorado. As the journey descends into madness, Aguirre's megalomania grows."
+                poster: "https://image.tmdb.org/t/p/w500/qMk93yMo82svW27FEjudgueBMUL.jpg",
+                summary: "In the 16th century, Spanish soldier Lope de Aguirre leads a doomed expedition down the Amazon in search of the legendary city of gold, El Dorado. As the journey descends into madness, Aguirre's megalomania grows.",
+                commentary: "Not a lot of eye-candy on this one, if you don't count the arguably best shots of the Andean Mountains ever recorded; some say one of cinema's biggest feats: A mad genius directing a lunatic in the middle of the jungle. Even the documentary on how this film was made is a film-boy's rite of passage."
+            },
+            {
+                id: 7,
+                title: "They Live",
+                director: "John Carpenter",
+                year: 1988,
+                poster: "https://image.tmdb.org/t/p/w500/ngnybFTuopfbfmmEeX9jjBQQmF6.jpg",
+                summary: "A lone drifter stumbles upon a unique pair of sunglasses that reveal aliens are systematically gaining control of the Earth by masquerading as humans and lulling the public into submission.",
+                commentary: "Might be one of those that are kinda bad, but age well? The social commentary seems unfiltered, maybe even kitsch, but I am sure that with a Negroni and some of that Lettuce™ we might put on our in-door sunglasses so nobody knows what we are really seeing."
             }
         ];
         
@@ -381,14 +780,10 @@
             }
         }
         
-        function login(event) {
-            event.preventDefault();
-            const name = document.getElementById('nameInput').value.trim();
-            if (name) {
-                currentUser = name;
-                localStorage.setItem('currentUser', name);
-                showApp();
-            }
+        function login(name) {
+            currentUser = name;
+            localStorage.setItem('currentUser', name);
+            showApp();
         }
         
         function logout() {
@@ -396,7 +791,6 @@
             currentUser = null;
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('app').classList.remove('active');
-            document.getElementById('nameInput').value = '';
         }
         
         function showApp() {
@@ -421,29 +815,52 @@
         function renderMovies() {
             const grid = document.getElementById('movieGrid');
             const votes = getVotes();
-            
-            grid.innerHTML = movies.map(movie => {
+
+            const movieCards = movies.map(movie => {
                 const vote = votes[movie.id];
                 const badge = vote ? `<div class="vote-badge ${vote}">${vote}</div>` : '';
-                
+
                 return `
                     <div class="movie-card" onclick="openModal(${movie.id})">
                         <div class="poster">
                             <img src="${movie.poster}" alt="${movie.title}">
                             ${badge}
                         </div>
-                        <div class="movie-title">${movie.title}</div>
                     </div>
                 `;
             }).join('');
+
+            const suggestionCard = `
+                <div class="suggestion-card">
+                    <input type="text" id="suggestionTitle" placeholder="Got ideas?" />
+                    <input type="text" id="suggestionReason" placeholder="Why should we watch it?" />
+                    <button onclick="submitSuggestion()">Submit</button>
+                </div>
+            `;
+
+            grid.innerHTML = movieCards + suggestionCard;
         }
         
         function openModal(movieId) {
             currentMovie = movies.find(m => m.id === movieId);
+            const votes = getVotes();
+            const currentVote = votes[movieId];
+
             document.getElementById('modalPoster').innerHTML = `<img src="${currentMovie.poster}" alt="${currentMovie.title}">`;
             document.getElementById('modalTitle').textContent = currentMovie.title;
-            document.getElementById('modalYear').textContent = currentMovie.year;
+            document.getElementById('modalInfo').textContent = `${currentMovie.director} | ${currentMovie.year}`;
             document.getElementById('modalSummary').textContent = currentMovie.summary;
+            document.getElementById('modalCommentary').textContent = currentMovie.commentary;
+
+            // Update vote button states
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            if (currentVote) {
+                const selectedBtn = document.querySelector(`.vote-btn.${currentVote}`);
+                if (selectedBtn) selectedBtn.classList.add('selected');
+            }
+
             document.getElementById('modal').classList.add('active');
         }
         
@@ -457,7 +874,127 @@
             renderMovies();
             closeModal();
         }
-        
+
+        function showMovies() {
+            document.getElementById('movieGrid').style.display = 'grid';
+            document.getElementById('resultsView').classList.remove('active');
+            document.getElementById('moviesBtn').classList.add('active');
+            document.getElementById('resultsBtn').classList.remove('active');
+        }
+
+        function showResults() {
+            document.getElementById('movieGrid').style.display = 'none';
+            document.getElementById('resultsView').classList.add('active');
+            document.getElementById('moviesBtn').classList.remove('active');
+            document.getElementById('resultsBtn').classList.add('active');
+            renderResults();
+        }
+
+        function getAllVotes() {
+            const allVotes = {};
+            // Get all keys from localStorage that start with 'votes_'
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('votes_')) {
+                    const username = key.replace('votes_', '');
+                    allVotes[username] = JSON.parse(localStorage.getItem(key));
+                }
+            }
+            return allVotes;
+        }
+
+        function renderResults() {
+            const allVotes = getAllVotes();
+            const resultsGrid = document.getElementById('resultsGrid');
+
+            const resultsHTML = movies.map(movie => {
+                // Count votes for this movie
+                let yesCount = 0;
+                let maybeCount = 0;
+                let vetoCount = 0;
+
+                Object.values(allVotes).forEach(userVotes => {
+                    const vote = userVotes[movie.id];
+                    if (vote === 'yes') yesCount++;
+                    else if (vote === 'maybe') maybeCount++;
+                    else if (vote === 'veto') vetoCount++;
+                });
+
+                return `
+                    <div class="results-movie">
+                        <div class="results-poster">
+                            <img src="${movie.poster}" alt="${movie.title}">
+                            <div class="results-votes">
+                                <div class="vote-count">
+                                    <div class="vote-count-label">Yes</div>
+                                    <div class="vote-count-number">${yesCount}</div>
+                                </div>
+                                <div class="vote-count">
+                                    <div class="vote-count-label">Maybe</div>
+                                    <div class="vote-count-number">${maybeCount}</div>
+                                </div>
+                                <div class="vote-count">
+                                    <div class="vote-count-label">Veto</div>
+                                    <div class="vote-count-number">${vetoCount}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            resultsGrid.innerHTML = resultsHTML;
+
+            // Render suggestions
+            const suggestions = getSuggestions();
+            if (suggestions.length > 0) {
+                const suggestionsHTML = `
+                    <div class="suggestions-section">
+                        <h2>Suggestions</h2>
+                        ${suggestions.map(suggestion => `
+                            <div class="suggestion-item">
+                                <div class="suggestion-title">${suggestion.title}</div>
+                                <div class="suggestion-reason">${suggestion.reason}</div>
+                                <div class="suggestion-author">— ${suggestion.author}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                resultsGrid.innerHTML += suggestionsHTML;
+            }
+        }
+
+        function submitSuggestion() {
+            const title = document.getElementById('suggestionTitle').value.trim();
+            const reason = document.getElementById('suggestionReason').value.trim();
+
+            if (!title || !reason) {
+                alert('Please fill in both fields');
+                return;
+            }
+
+            const suggestions = getSuggestions();
+            suggestions.push({
+                title: title,
+                reason: reason,
+                author: currentUser,
+                timestamp: Date.now()
+            });
+
+            localStorage.setItem('suggestions', JSON.stringify(suggestions));
+
+            // Clear the inputs
+            document.getElementById('suggestionTitle').value = '';
+            document.getElementById('suggestionReason').value = '';
+
+            alert('Suggestion submitted!');
+        }
+
+        function getSuggestions() {
+            const suggestions = localStorage.getItem('suggestions');
+            return suggestions ? JSON.parse(suggestions) : [];
+        }
+
         // Initialize app
         init();
     </script>
