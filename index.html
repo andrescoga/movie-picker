@@ -483,22 +483,23 @@
         }
 
         .results-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 769px) {
-            .results-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 30px;
-            }
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
         .results-movie {
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        @media (min-width: 769px) {
+            .results-movie {
+                grid-template-columns: 80px 1fr;
+                gap: 20px;
+            }
         }
 
         .results-poster {
@@ -507,56 +508,71 @@
             background: #e8e8e0;
             overflow: hidden;
             border: 1px solid #d0d0c8;
-            position: relative;
         }
 
         .results-poster img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.3s;
         }
 
-        .results-votes {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        .results-bars {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 12px;
+        }
+
+        .results-bar {
+            display: grid;
+            grid-template-columns: 60px 1fr 40px;
+            gap: 12px;
             align-items: center;
-            gap: 16px;
-            background: rgba(245, 245, 240, 0.95);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
         }
 
-        .results-movie:hover .results-votes {
-            opacity: 1;
+        @media (min-width: 769px) {
+            .results-bar {
+                grid-template-columns: 80px 1fr 50px;
+                gap: 16px;
+            }
         }
 
-        .vote-count {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .vote-count-label {
-            font-size: 9px;
-            font-weight: 400;
-            letter-spacing: 1.5px;
+        .bar-label {
+            font-size: 10px;
+            font-weight: 300;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            color: #999;
+            color: #666;
         }
 
-        .vote-count-number {
-            font-size: 24px;
+        .bar-track {
+            height: 8px;
+            background: #e8e8e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .bar-fill.yes {
+            background: #1a1a1a;
+        }
+
+        .bar-fill.maybe {
+            background: #666;
+        }
+
+        .bar-fill.veto {
+            background: #999;
+        }
+
+        .bar-count {
+            font-size: 14px;
             font-weight: 300;
             color: #1a1a1a;
+            text-align: right;
         }
 
         /* Suggestion Card */
@@ -567,30 +583,61 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 16px;
         }
 
-        .suggestion-card input {
+        .suggestion-card h3 {
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .suggestion-card input,
+        .suggestion-card textarea {
             width: 100%;
-            padding: 12px 0;
+            padding: 8px 0;
             font-size: 13px;
             font-weight: 300;
             background: transparent;
             border: none;
-            border-bottom: 1px solid #1a1a1a;
+            border-bottom: 1px solid #ccc;
             color: #1a1a1a;
             font-family: 'Roboto', sans-serif;
         }
 
-        .suggestion-card input::placeholder {
+        .suggestion-card textarea {
+            resize: none;
+            line-height: 1.8;
+            margin-top: 52px;
+            padding: 0;
+            border-bottom: none;
+            background-image: repeating-linear-gradient(
+                transparent,
+                transparent 1.8em,
+                #ccc 1.8em,
+                #ccc calc(1.8em + 1px)
+            );
+            background-size: 100% 100%;
+        }
+
+        .suggestion-card input::placeholder,
+        .suggestion-card textarea::placeholder {
             color: #999;
-            font-weight: 300;
+            font-weight: 200;
+            font-style: italic;
+        }
+
+        .suggestion-card input:focus,
+        .suggestion-card textarea:focus {
+            outline: none;
         }
 
         .suggestion-card input:focus {
-            outline: none;
-            border-bottom-color: #1a1a1a;
+            border-bottom-color: #666;
         }
 
         .suggestion-card button {
@@ -605,6 +652,8 @@
             cursor: pointer;
             transition: opacity 0.3s;
             font-family: 'Roboto', sans-serif;
+            margin-top: auto;
+            margin-bottom: 8px;
         }
 
         .suggestion-card button:hover {
@@ -899,6 +948,10 @@
         function renderMovies() {
             const grid = document.getElementById('movieGrid');
 
+            // Save current suggestion input values before re-rendering
+            const savedTitle = document.getElementById('suggestionTitle')?.value || '';
+            const savedReason = document.getElementById('suggestionReason')?.value || '';
+
             getVotes((votes) => {
                 const movieCards = movies.map(movie => {
                     const vote = votes[movie.id];
@@ -916,13 +969,18 @@
 
                 const suggestionCard = `
                     <div class="suggestion-card">
-                        <input type="text" id="suggestionTitle" placeholder="Got ideas?" />
-                        <input type="text" id="suggestionReason" placeholder="Why should we watch it?" />
+                        <h3>Got Ideas?</h3>
+                        <input type="text" id="suggestionTitle" placeholder="Movie Title" />
+                        <textarea id="suggestionReason" rows="5" placeholder="Why should we watch it?"></textarea>
                         <button onclick="submitSuggestion()">Submit</button>
                     </div>
                 `;
 
                 grid.innerHTML = movieCards + suggestionCard;
+
+                // Restore suggestion input values after re-rendering
+                if (savedTitle) document.getElementById('suggestionTitle').value = savedTitle;
+                if (savedReason) document.getElementById('suggestionReason').value = savedReason;
             });
         }
         
@@ -988,8 +1046,8 @@
             const resultsGrid = document.getElementById('resultsGrid');
 
             getAllVotes((allVotes) => {
-                const resultsHTML = movies.map(movie => {
-                    // Count votes for this movie
+                // Calculate vote counts and points for each movie
+                const moviesWithScores = movies.map(movie => {
                     let yesCount = 0;
                     let maybeCount = 0;
                     let vetoCount = 0;
@@ -1001,23 +1059,54 @@
                         else if (vote === 'veto') vetoCount++;
                     });
 
+                    const totalPoints = (yesCount * 3) + (maybeCount * 1) + (vetoCount * 0);
+                    const totalVotes = yesCount + maybeCount + vetoCount;
+
+                    return {
+                        ...movie,
+                        yesCount,
+                        maybeCount,
+                        vetoCount,
+                        totalPoints,
+                        totalVotes
+                    };
+                });
+
+                // Sort by points (descending)
+                moviesWithScores.sort((a, b) => b.totalPoints - a.totalPoints);
+
+                const resultsHTML = moviesWithScores.map(movie => {
+                    const maxVotes = movie.totalVotes || 1; // Avoid division by zero
+                    const yesWidth = (movie.yesCount / maxVotes) * 100;
+                    const maybeWidth = (movie.maybeCount / maxVotes) * 100;
+                    const vetoWidth = (movie.vetoCount / maxVotes) * 100;
+
                     return `
                         <div class="results-movie">
                             <div class="results-poster">
                                 <img src="${movie.poster}" alt="${movie.title}">
-                                <div class="results-votes">
-                                    <div class="vote-count">
-                                        <div class="vote-count-label">Yes</div>
-                                        <div class="vote-count-number">${yesCount}</div>
+                            </div>
+                            <div class="results-bars">
+                                <div class="results-bar">
+                                    <span class="bar-label">Yes</span>
+                                    <div class="bar-track">
+                                        <div class="bar-fill yes" style="width: ${yesWidth}%"></div>
                                     </div>
-                                    <div class="vote-count">
-                                        <div class="vote-count-label">Maybe</div>
-                                        <div class="vote-count-number">${maybeCount}</div>
+                                    <span class="bar-count">${movie.yesCount}</span>
+                                </div>
+                                <div class="results-bar">
+                                    <span class="bar-label">Maybe</span>
+                                    <div class="bar-track">
+                                        <div class="bar-fill maybe" style="width: ${maybeWidth}%"></div>
                                     </div>
-                                    <div class="vote-count">
-                                        <div class="vote-count-label">Veto</div>
-                                        <div class="vote-count-number">${vetoCount}</div>
+                                    <span class="bar-count">${movie.maybeCount}</span>
+                                </div>
+                                <div class="results-bar">
+                                    <span class="bar-label">Veto</span>
+                                    <div class="bar-track">
+                                        <div class="bar-fill veto" style="width: ${vetoWidth}%"></div>
                                     </div>
+                                    <span class="bar-count">${movie.vetoCount}</span>
                                 </div>
                             </div>
                         </div>
